@@ -1,10 +1,18 @@
 // NPM Packages
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Styles
 import './index.css';
 
+// Constants
+const APP_NAME = "🍭 Candy Drop";
+const APP_DESCRIPTION = "NFT drop machine with fair mint";
+const CONNECT_WALLET_BUTTON_LABEL = "Connect to Wallet";
+
 function App() {
+  // State
+  const [ walletAddress, setWalletAddress ] = useState(null);
+
   // Hooks
   useEffect(() => {
     async function onLoad() {
@@ -18,19 +26,20 @@ function App() {
     };
   }, []);
 
+  // Helpers
   async function checkIfWalletIsConnected() {
     try {
-      const { solana } = window;
-
-      if (solana) {
-        if (solana.isPhantom) {
+      if (window && window.solana) {
+        if (window.solana && window.solana.isPhantom) {
           console.log("Phantom wallet found!");
 
-          let response = await solana.connect({ onlyIfTrusted: true });
+          let response = await window.solana.connect({ onlyIfTrusted: true });
 
           let publicKey = response.publicKey.toString();
 
           console.log("Connected with Public Key: ", publicKey);
+
+          setWalletAddress(publicKey);
         }
       }
       else {
@@ -42,12 +51,38 @@ function App() {
     }
   }
 
+  // Handlers
+  async function handleConnectWallet() {
+    if (window && window.solana) {
+      let response = await window.solana.connect();
+
+      let publicKey = response.publicKey.toString();
+
+      console.log("Connected with Public Key: ", publicKey);
+
+      setWalletAddress(publicKey);
+    }
+  }
+
+  // Renderers
+  function renderConnectWalletButton() {
+    return (
+      <button
+      className="cta-button connect-wallet-button"
+      onClick={handleConnectWallet}
+      >
+        { CONNECT_WALLET_BUTTON_LABEL }
+      </button>
+    );
+  }
+
   return (
     <div className="App">
 			<div className="container">
 				<div className="header-container">
-					<p className="header">🍭 Candy Drop</p>
-					<p className="sub-text">NFT drop machine with fair mint</p>
+					<p className="header">{ APP_NAME }</p>
+					<p className="sub-text">{ APP_DESCRIPTION }</p>
+          { !walletAddress && renderConnectWalletButton() }
 				</div>
 				<div className="footer-container">
 				</div>
