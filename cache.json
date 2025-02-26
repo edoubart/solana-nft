@@ -1,0 +1,42 @@
+{
+  "program": {
+    "candyMachine": "7PADkGErcy1jyJ5EgVBek9LGRYz24i3ogFGC4XBs5yv5",
+    "candyGuard": "",
+    "candyMachineCreator": "CGFP6FvgLfnWtKRKbrgYnYZ3N7pSq72LKVvk7BqrAiox",
+    "collectionMint": "EMcPb2gBaTqzpH2eVwTEA6jFGDZhzLoUsBj7X5QHkHyJ"
+  },
+  "items": {
+    "-1": {
+      "name": "My Rare Paintings Collection",
+      "image_hash": "b891d6cb1674d6d4bd248ae77ea74fded6203f4c54e23e17fedffaa2e96a4c70",
+      "image_link": "https://gateway.irys.xyz/Avhg2ZahWa4LqV7XhKwhs4LHiPcM9C9gBQZ28BUFKefH?ext=png",
+      "metadata_hash": "058ce6fb86476bbf05d7f72b6641e0660d7bfa2044f4d53569841e91d5880d68",
+      "metadata_link": "https://gateway.irys.xyz/CnEaokSQX2J7hfGGawYeb3S7fDyJ72BMNkov1cPVFmr4",
+      "onChain": true
+    },
+    "0": {
+      "name": "Salvator Mundi",
+      "image_hash": "dfb53dfc400134a6b3492404dba651470e51cb3d0f9c8e639af6d801009afebb",
+      "image_link": "https://gateway.irys.xyz/H5FL7B21B8BBbEywiZvpTnSaq3HP3LtduXH98MpeMQ1s?ext=png",
+      "metadata_hash": "a82811119529307353398367d95357428ddab3ff1075aa1b08060772d17ea713",
+      "metadata_link": "https://gateway.irys.xyz/5BE9SDWemyA35YQqxE4v17bvSRn8nWFMZZqUUVZpLMBR",
+      "onChain": true
+    },
+    "1": {
+      "name": "Interchanged",
+      "image_hash": "33be11e949d9aef1dcfc5b2d81d951fd1c4eec4e81fd20c4ba8ea825d57c9aa2",
+      "image_link": "https://gateway.irys.xyz/64SJRgtCixXcMnXS7K8giWaHcXt4onhazzLoBN2GpAJq?ext=png",
+      "metadata_hash": "e26d0646b61e82850ef5d5aaf8a45f3a32a6df5bb0aa5581417de0526b0743b7",
+      "metadata_link": "https://gateway.irys.xyz/5Jc9sghdHmP2iz3dpqTZR169ebdre1FsTs1xPgTHGstS",
+      "onChain": true
+    },
+    "2": {
+      "name": "The Card Players",
+      "image_hash": "5479f2254d2ea2bdf7e7c4c5e54dea8eed6fbecbec5d82155edbd16b111d5636",
+      "image_link": "https://gateway.irys.xyz/3CS17G3KGmvRQAHKC8B3MBXdbPJv4wwYEjavwSH63qzG?ext=png",
+      "metadata_hash": "865b1458b6df73f9e450dafe9c8baff786a3321aacecd0059806423fb51b548e",
+      "metadata_link": "https://gateway.irys.xyz/CuHyZ73MSn1DJCRwpGEs1eRETAshCjBcxq78YutELGTA",
+      "onChain": true
+    }
+  }
+}

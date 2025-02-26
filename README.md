@@ -15,6 +15,41 @@ NFTs are created, uploaded and minted through Metaplex (NFT standard on Solana):
  https://metaplex.com
 Specifically, the project uses Metaplex's Candy Machine Program.
 
+## Sugar
+
+Sugar is a command-line tool to interact with Candy Machines.
+
+Reference: https://developers.metaplex.com/candy-machine/sugar
+
+### Installation
+
+```
+bash <(curl -sSf https://sugar.metaplex.com/install.sh)
+```
+
+### Launch
+
+To connect to the devnet Cluster using the Solana CLI:
+
+```
+solana config set --url https://api.devnet.solana.com
+```
+
+Then, do:
+
+```
+sugar launch
+```
+
+Result:
+
+```
+Verification successful. You're good to go!
+
+See your candy machine at:
+  -> https://www.solana.fm/address/7PADkGErcy1jyJ5EgVBek9LGRYz24i3ogFGC4XBs5yv5?cluster=devnet-alpha
+```
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -1,0 +1,35 @@
+{
+  "network": "devnet",
+  "tokenStandard": "nft",
+  "number": 3,
+  "symbol": "MRPC",
+  "sellerFeeBasisPoints": 500,
+  "isMutable": true,
+  "isSequential": false,
+  "creators": [
+    {
+      "address": "H9XUYsgDG4Fr83roHNnM3XGdNJVyGtdCQv7frLCzmzYD",
+      "share": 100
+    }
+  ],
+  "uploadMethod": "bundlr",
+  "ruleSet": null,
+  "awsConfig": null,
+  "sdriveApiKey": null,
+  "nftStorageAuthToken": null,
+  "shdwStorageAccount": null,
+  "pinataConfig": null,
+  "hiddenSettings": null,
+  "guards": {
+    "default": {
+      "solPayment": {
+        "value": 0.1,
+        "destination": "H9XUYsgDG4Fr83roHNnM3XGdNJVyGtdCQv7frLCzmzYD"
+      },
+      "startDate": {
+        "date": "2025-01-01T00:00:01Z"
+      }
+    }
+  },
+  "maxEditionSupply": null
+}

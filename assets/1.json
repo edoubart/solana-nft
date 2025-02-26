@@ -1,0 +1,15 @@
+{
+  "name": "Interchanged",
+  "description": "Interchanged by Willem de Kooning",
+  "symbol": "MRPC",
+  "image": "1.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "1.png",
+        "type": "image/png"
+      }
+    ],
+    "category": "image"
+  }
+}

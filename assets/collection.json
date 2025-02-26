@@ -1,0 +1,15 @@
+{
+  "name": "My Rare Paintings Collection",
+  "description": "This is My NFT Rare Paintings Collection",
+  "image": "collection.jpg",
+  "external_url": "https://www.verdict.co.uk/wp-content/uploads/2017/11/mundi.jpg",
+  "properties": {
+    "files": [
+      {
+        "uri": "collection.jpg",
+        "type": "image/jpg"
+      }
+    ],
+    "category": "image"
+  }
+}

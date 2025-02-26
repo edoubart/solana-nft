@@ -1,0 +1,15 @@
+{
+  "name": "Salvator Mundi",
+  "description": "Salvator Mundi by Leonardo da Vinci",
+  "symbol": "MRPC",
+  "image": "0.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "0.png",
+        "type": "image/png"
+      }
+    ],
+    "category": "image"
+  }
+}
