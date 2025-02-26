@@ -1,6 +1,9 @@
 // NPM Packages
 import { useEffect, useState } from 'react';
 
+// Custom Modules
+import CandyMachine from './../CandyMachine';
+
 // Styles
 import './index.css';
 
@@ -65,6 +68,16 @@ function App() {
   }
 
   // Renderers
+  function renderCandyMachine(walletAddress) {
+    return (
+      <CandyMachine
+        data={{
+          walletAddress,
+        }}
+      />
+    );
+  }
+
   function renderConnectWalletButton() {
     return (
       <button
@@ -84,6 +97,9 @@ function App() {
 					<p className="sub-text">{ APP_DESCRIPTION }</p>
           { !walletAddress && renderConnectWalletButton() }
 				</div>
+
+        { walletAddress && renderCandyMachine(walletAddress) }
+
 				<div className="footer-container">
 				</div>
 			</div>

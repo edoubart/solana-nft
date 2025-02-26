@@ -112,7 +112,7 @@ async function getAtaForMint(mint, buyer) {
       tokenMetadataPublicKey.toBuffer(),
       mint.toBuffer(),
     ],
-    splAssociatedTokenAccountPublic_key,
+    splAssociatedTokenAccountPublicKey,
   );
 };
 

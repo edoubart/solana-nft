@@ -1,14 +1,15 @@
 // NPM Packages
-import { web3, Program, Provider } from '@coral-xyz/anchor';
+import { useEffect, useState } from 'react';
+import { web3, AnchorProvider, Program } from '@coral-xyz/anchor';
 import { MintLayout, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { Connection, PublicKey } from '@solana/web3.js';
+import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
 
 // Connection
 import { sendTransactions } from './connection';
 
 // Helpers
 import {
-  candyMachineProgram,
+  candyMachinePublicKey,
   civicPublicKey,
   getAtaForMint,
   getNetworkExpire,
@@ -20,12 +21,86 @@ import {
 // Styles
 import './index.css';
 
+// Constants
+const MINT_NFT_BUTTON_LABEL = "Mint NFT";
+const SOLANA_NETWORK = 'devnet';
+const SOLANA_PREFLIGHT_COMMITMENT = 'processed';
+
+// Solana
+const network = clusterApiUrl(SOLANA_NETWORK);
+const opts = {
+  preflightCommitment: SOLANA_PREFLIGHT_COMMITMENT,
+};
+
 function CandyMachine(props) {
+  // State
+  const [ candyMachine, setCandyMachine ] = useState(null);
+
+  // Hooks
+  useEffect(() => {
+    getCandyMachineState()
+  }, []);
+
   // Helpers
+  function getProvider() {
+    let connection = new Connection(network, opts.preflightCommitment);
+
+    let provider = new AnchorProvider(
+      connection,
+      window.solana,
+      opts.preflightCommitment,
+    );
+
+    return provider;
+  }
+
+  async function getCandyMachineState() {
+    let provider = getProvider();
+    console.log('provider: ', provider);
+
+    console.log('candyMachinePublicKey: ', candyMachinePublicKey);
+    let idl = await Program.fetchIdl(candyMachinePublicKey, provider);
+    console.log('idl: ', idl);
+
+    let program = new Program(idl, candyMachinePublicKey, provider);
+    console.log('program: ', program);
+
+    let candyMachine = await program.account.candyMachine
+      .fetch(process.env.REACT_APP_CANDY_MACHINE_ID);
+
+    let itemsAvailable = candyMachine.data.itemsAvailable.toNumber();
+    console.log('itemsAvailable: ', itemsAvailable);
+
+    let itemsReedeemed = candyMachine.itemsReedeemed.toNumber();
+    console.log('itemsReedeemed: ', itemsReedeemed);
+
+    let itemsRemaining = itemsAvailable - itemsReedeemed;
+    console.log('itemsRemaining: ', itemsRemaining);
+
+    let goLiveDate = candyMachine.data.goLiveDate.toNumber();
+    console.log('goLiveDate: ', goLiveDate);
+
+    let now = new Date().getTime() / 1000;
+    console.log('now: ', now);
+
+    let presale = candyMachine.data.whitelistMintSettings
+      && candyMachine.data.whitelistMintSettings.presale
+      && (
+        !candyMachine.data.goLiveDate
+        || candyMachine.data.goLiveDate.toNumber() > now
+      );
+    console.log('presale: ', presale);
+
+    let goLiveDateTimeString = new Date(goLiveDate * 1000).toGMTString();
+    console.log('goLiveDateTimeString: ', goLiveDateTimeString);
+
+    setCandyMachine(candyMachine);
+  }
+
   function createAssociatedTokenAccountInstruction({
     associatedTokenAddress,
     payer,
-    props.walletAddress,
+    walletAddress,
     splTokenMintAddress,
   }) {
     const keys = [
@@ -40,7 +115,7 @@ function CandyMachine(props) {
         isWritable: true,
       },
       {
-        pubkey: props.walletAddress,
+        pubkey: props.data.walletAddress,
         isSigner: false,
         isWritable: false,
       },
@@ -78,7 +153,7 @@ function CandyMachine(props) {
 
     return await web3.PublicKey.findProgramAddress(
       [ Buffer.from('candy_machine'), candyMachineID.toBuffer() ],
-      candyMachineProgram,
+      candyMachinePublicKey,
     );
   };
 
@@ -114,12 +189,12 @@ function CandyMachine(props) {
     const mint = web3.Keypair.generate();
 
     const userTokenAccountAddress = (
-      await getAtaForMint(mint.publicKey, props.walletAddress.publicKey)
+      await getAtaForMint(mint.publicKey, props.data.walletAddress.publicKey)
     )[0];
 
     const userPayingAccountAddress = candyMachine.state.tokenMint
-      ? (await getAtaForMint(candyMachine.state.tokenMint, props.walletAddress.publicKey))[0]
-      : props.walletAddress.publicKey;
+      ? (await getAtaForMint(candyMachine.state.tokenMint, props.data.walletAddress.publicKey))[0]
+      : props.data.walletAddress.publicKey;
 
     const candyMachineAddress = candyMachine.id;
     const remainingAccounts = [];
@@ -127,7 +202,7 @@ function CandyMachine(props) {
     const cleanupInstructions = [];
     const instructions = [
       web3.SystemProgram.createAccount({
-        fromPubkey: props.walletAddress.publicKey,
+        fromPubkey: props.data.walletAddress.publicKey,
         lamports: await candyMachine.program.provider.connection
           .getMinimumBalanceForRentExemption(
             MintLayout.span,
@@ -140,20 +215,20 @@ function CandyMachine(props) {
         TOKEN_PROGRAM_ID,
         mint.publicKey,
         0,
-        props.walletAddress.publicKey,
-        props.walletAddress.publicKey,
+        props.data.walletAddress.publicKey,
+        props.data.walletAddress.publicKey,
       ),
       createAssociatedTokenAccountInstruction(
         userTokenAccountAddress,
-        props.walletAddress.publicKey,
-        props.walletAddress.publicKey,
+        props.data.walletAddress.publicKey,
+        props.data.walletAddress.publicKey,
         mint.publicKey,
       ),
       Token.createMintToInstruction(
         TOKEN_PROGRAM_ID,
         mint.publicKey,
         userTokenAccountAddress,
-        props.walletAddress.publicKey,
+        props.data.walletAddress.publicKey,
         [],
         1,
       ),
@@ -163,7 +238,7 @@ function CandyMachine(props) {
       remainingAccounts.push({
         pubkey: (
           await getNetworkToken(
-            props.walletAddress.publicKey,
+            props.data.walletAddress.publicKey,
             candyMachine.state.gatekeeper.gatekeeperNetwork,
           )
         )[0],
@@ -193,7 +268,7 @@ function CandyMachine(props) {
         candyMachine.state.whitelistMintSettings.mint,
       );
 
-      const whitelistToken = (await getAtaForMint(mint, props.walletAddress.publicKey))[0];
+      const whitelistToken = (await getAtaForMint(mint, props.data.walletAddress.publicKey))[0];
       remainingAccounts.push({
         pubkey: whitelistToken,
         isWritable: true,
@@ -226,7 +301,7 @@ function CandyMachine(props) {
               TOKEN_PROGRAM_ID,
               whitelistToken,
               whitelistBurnAuthority.publicKey,
-              props.walletAddress.publicKey,
+              props.data.walletAddress.publicKey,
               [],
               1,
             ),
@@ -236,7 +311,7 @@ function CandyMachine(props) {
             Token.createRevokeInstruction(
               TOKEN_PROGRAM_ID,
               whitelistToken,
-              props.walletAddress.publicKey,
+              props.data.walletAddress.publicKey,
               [],
             ),
           );
@@ -265,7 +340,7 @@ function CandyMachine(props) {
           TOKEN_PROGRAM_ID,
           userPayingAccountAddress,
           transferAuthority.publicKey,
-          props.walletAddress.publicKey,
+          props.data.walletAddress.publicKey,
           [],
           candyMachine.state.price.toNumber(),
         ),
@@ -275,7 +350,7 @@ function CandyMachine(props) {
         Token.createRevokeInstruction(
           TOKEN_PROGRAM_ID,
           userPayingAccountAddress,
-          props.walletAddress.publicKey,
+          props.data.walletAddress.publicKey,
           [],
         ),
       );
@@ -299,14 +374,14 @@ function CandyMachine(props) {
           masterEdition,
           metadata: metadataAddress,
           mint: mint.publicKey,
-          mintAuthority: props.walletAddress.publicKey,
-          payer: props.walletAddress.publicKey,
+          mintAuthority: props.data.walletAddress.publicKey,
+          payer: props.data.walletAddress.publicKey,
           recentBlockhashes: web3.SYSVAR_RECENT_BLOCKHASHES_PUBKEY,
           rent: web3.SYSVAR_RENT_PUBKEY,
           systemProgram: web3.SystemProgram.programId,
           tokenMetadataProgram: tokenMetadataPublicKey,
           tokenProgram: TOKEN_PROGRAM_ID,
-          updateAuthority: props.walletAddress.publicKey,
+          updateAuthority: props.data.walletAddress.publicKey,
           wallet: candyMachine.state.treasury,
         },
         remainingAccounts:
@@ -337,7 +412,7 @@ function CandyMachine(props) {
         <p>Drop Date:</p>
         <p>Items Minted:</p>
         <button className="cta-button mint-button" onClick={handleMintToken}>
-          Mint NFT
+          { MINT_NFT_BUTTON_LABEL }
         </button>
       </div>
     </div>
