@@ -1,6 +1,19 @@
 # Solana NFT
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Create and mint NFTs in Solana.
+
+NFT stands for (Non-Fungible Token). Unlike other Solana token, an NFT is a
+ token that user can own and that links to some piece of data like a picture, or
+ a movie ticket, or a passport, or anything like that. But what make
+ non-fungible token different from other token is that each NFT has a unique
+ identifier that lets the owner prove that their token is one of a kind.
+
+Solana NFT is a Web App (Dapp) that let users connect their wallet, click "Mint"
+ and receive an NFT from our own personal collection in their wallet.
+
+NFTs are created, uploaded and minted through Metaplex (NFT standard on Solana):
+ https://metaplex.com
+Specifically, the project uses Metaplex's Candy Machine Program.
 
 ## Available Scripts
 
