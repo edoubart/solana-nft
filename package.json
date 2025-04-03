@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@metaplex-foundation/mpl-candy-machine": "^6.1.0",
+    "@metaplex-foundation/umi": "^1.1.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.1.1",
+    "@solana/web3.js": "^1.98.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
